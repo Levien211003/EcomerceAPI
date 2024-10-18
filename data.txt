@@ -1,0 +1,66 @@
+
+use EcommerceDB
+go
+INSERT INTO Users (Username, Email, PasswordHash, Role, FullName, PhoneNumber, ProfileImage)
+VALUES 
+('user1', 'user1@example.com', 'hashedpassword1', 'user', 'Nguyen Van A', '0901234567', '/images/profile1.jpg'),
+('user2', 'user2@example.com', 'hashedpassword2', 'user', 'Tran Thi B', '0902345678', '/images/profile2.jpg'),
+('user3', 'user3@example.com', 'hashedpassword3', 'user', 'Le Van C', '0903456789', '/images/profile3.jpg'),
+('admin1', 'admin@example.com', 'hashedpassword4', 'admin', 'Admin', '0904567890', '/images/profile4.jpg'),
+('user4', 'user4@example.com', 'hashedpassword5', 'user', 'Pham Thi D', '0905678901', '/images/profile5.jpg');
+INSERT INTO Products (Name, Description, Price, Category, Stock, ImageUrl)
+VALUES 
+('Áo Thun Nam', 'Áo thun nam chất liệu cotton', 150000, 'Áo', 50, '/images/products/ao_thun_nam.jpg'),
+('Quần Jean Nữ', 'Quần jean nữ thời trang', 300000, 'Quần', 30, '/images/products/quan_jean_nu.jpg'),
+('Giày Sneaker', 'Giày sneaker phong cách', 500000, 'Phụ kiện', 20, '/images/products/giay_sneaker.jpg'),
+('Túi Xách Nữ', 'Túi xách nữ cao cấp', 400000, 'Phụ kiện', 15, '/images/products/tui_xach_nu.jpg'),
+('Mũ Lưỡi Trai', 'Mũ lưỡi trai thể thao', 100000, 'Phụ kiện', 100, '/images/products/mu_luoi_trai.jpg');
+INSERT INTO Orders (UserID, TotalPrice, OrderStatus, PaymentMethod, ShippingAddress)
+VALUES 
+(1, 600000, 'Processing', 'Credit Card', '123 Đường ABC, Quận 1, TP HCM'),
+(2, 150000, 'Shipped', 'PayPal', '456 Đường DEF, Quận 3, TP HCM'),
+(3, 500000, 'Delivered', 'Credit Card', '789 Đường GHI, Quận 7, TP HCM'),
+(1, 400000, 'Cancelled', 'PayPal', '123 Đường ABC, Quận 1, TP HCM'),
+(2, 300000, 'Processing', 'Credit Card', '456 Đường DEF, Quận 3, TP HCM');
+INSERT INTO OrderDetails (OrderID, ProductID, Quantity, UnitPrice)
+VALUES 
+(1, 1, 2, 150000),
+(1, 3, 1, 500000),
+(2, 1, 1, 150000),
+(3, 3, 1, 500000),
+(4, 4, 1, 400000);
+INSERT INTO Cart (UserID, ProductID, Quantity)
+VALUES 
+(1, 1, 2),
+(2, 2, 1),
+(3, 3, 1),
+(4, 4, 1),
+(5, 5, 3);
+INSERT INTO Reviews (ProductID, UserID, Rating, Comment)
+VALUES 
+(1, 1, 5, 'Sản phẩm rất tốt, chất lượng cao'),
+(2, 2, 4, 'Quần jean đẹp nhưng hơi chật'),
+(3, 3, 5, 'Giày sneaker rất thoải mái khi đi'),
+(4, 1, 3, 'Túi xách ổn nhưng không giống hình lắm'),
+(5, 2, 4, 'Mũ lưỡi trai giá rẻ, chất lượng tạm ổn');
+INSERT INTO Promotions (PromoCode, DiscountPercent, StartDate, EndDate)
+VALUES 
+('SUMMER2024', 10, '2024-06-01', '2024-08-31'),
+('WINTER2024', 15, '2024-12-01', '2025-01-31'),
+('NEWUSER', 20, '2024-01-01', '2024-12-31'),
+('BLACKFRIDAY', 30, '2024-11-23', '2024-11-30'),
+('FREESHIP', 5, '2024-07-01', '2024-09-01');
+INSERT INTO UserAddresses (UserID, Address, IsDefault)
+VALUES 
+(1, '123 Đường ABC, Quận 1, TP HCM', 1),
+(2, '456 Đường DEF, Quận 3, TP HCM', 1),
+(3, '789 Đường GHI, Quận 7, TP HCM', 0),
+(1, '321 Đường JKL, Quận 1, TP HCM', 0),
+(2, '654 Đường MNO, Quận 3, TP HCM', 0);
+INSERT INTO Notifications (UserID, NotificationText, IsRead)
+VALUES 
+(1, 'Đơn hàng của bạn đang được xử lý', 0),
+(2, 'Sản phẩm mới đã được thêm vào giỏ hàng', 1),
+(3, 'Đơn hàng của bạn đã được giao thành công', 1),
+(4, 'Mã khuyến mãi BLACKFRIDAY sắp hết hạn', 0),
+(5, 'Đơn hàng của bạn đã bị hủy', 0);

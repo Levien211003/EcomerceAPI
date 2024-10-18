@@ -1,0 +1,93 @@
+CREATE DATABASE EcommerceDB;
+GO
+USE EcommerceDB;
+-- Tạo bảng Users
+CREATE TABLE Users (
+    UserID INT PRIMARY KEY IDENTITY(1,1),
+    Username NVARCHAR(50) NOT NULL,
+    Email NVARCHAR(100) NOT NULL UNIQUE,
+    PasswordHash NVARCHAR(255) NOT NULL,
+    Role NVARCHAR(20) CHECK (Role IN ('user', 'admin')) NOT NULL DEFAULT 'user',
+    FullName NVARCHAR(100),
+    PhoneNumber NVARCHAR(15),
+    ProfileImage NVARCHAR(255),
+    CreatedAt DATETIME DEFAULT GETDATE(),
+    IsDeleted BIT DEFAULT 0
+);
+
+-- Tạo bảng Products
+CREATE TABLE Products (
+    ProductID INT PRIMARY KEY IDENTITY(1,1),
+    Name NVARCHAR(100) NOT NULL,
+    Description NVARCHAR(MAX),
+    Price DECIMAL(18,2) NOT NULL,
+    Category NVARCHAR(50),
+    Stock INT DEFAULT 0,
+    ImageUrl NVARCHAR(255),
+    CreatedAt DATETIME DEFAULT GETDATE(),
+    UpdatedAt DATETIME DEFAULT GETDATE()
+);
+
+-- Tạo bảng Orders
+CREATE TABLE Orders (
+    OrderID INT PRIMARY KEY IDENTITY(1,1),
+    UserID INT FOREIGN KEY REFERENCES Users(UserID),
+    TotalPrice DECIMAL(18,2) NOT NULL,
+    OrderStatus NVARCHAR(50) CHECK (OrderStatus IN ('Processing', 'Shipped', 'Delivered', 'Cancelled')) DEFAULT 'Processing',
+    PaymentMethod NVARCHAR(50),
+    ShippingAddress NVARCHAR(255),
+    OrderDate DATETIME DEFAULT GETDATE()
+);
+
+-- Tạo bảng OrderDetails
+CREATE TABLE OrderDetails (
+    OrderDetailID INT PRIMARY KEY IDENTITY(1,1),
+    OrderID INT FOREIGN KEY REFERENCES Orders(OrderID),
+    ProductID INT FOREIGN KEY REFERENCES Products(ProductID),
+    Quantity INT NOT NULL,
+    UnitPrice DECIMAL(18,2) NOT NULL
+);
+
+-- Tạo bảng Cart
+CREATE TABLE Cart (
+    CartID INT PRIMARY KEY IDENTITY(1,1),
+    UserID INT FOREIGN KEY REFERENCES Users(UserID),
+    ProductID INT FOREIGN KEY REFERENCES Products(ProductID),
+    Quantity INT NOT NULL
+);
+
+-- Tạo bảng Reviews
+CREATE TABLE Reviews (
+    ReviewID INT PRIMARY KEY IDENTITY(1,1),
+    ProductID INT FOREIGN KEY REFERENCES Products(ProductID),
+    UserID INT FOREIGN KEY REFERENCES Users(UserID),
+    Rating INT CHECK (Rating BETWEEN 1 AND 5),
+    Comment NVARCHAR(MAX),
+    CreatedAt DATETIME DEFAULT GETDATE()
+);
+
+-- Tạo bảng Promotions
+CREATE TABLE Promotions (
+    PromotionID INT PRIMARY KEY IDENTITY(1,1),
+    PromoCode NVARCHAR(50) NOT NULL UNIQUE,
+    DiscountPercent INT CHECK (DiscountPercent BETWEEN 1 AND 100),
+    StartDate DATETIME NOT NULL,
+    EndDate DATETIME NOT NULL
+);
+
+-- Tạo bảng UserAddresses
+CREATE TABLE UserAddresses (
+    AddressID INT PRIMARY KEY IDENTITY(1,1),
+    UserID INT FOREIGN KEY REFERENCES Users(UserID),
+    Address NVARCHAR(255) NOT NULL,
+    IsDefault BIT DEFAULT 0
+);
+
+-- Tạo bảng Notifications
+CREATE TABLE Notifications (
+    NotificationID INT PRIMARY KEY IDENTITY(1,1),
+    UserID INT FOREIGN KEY REFERENCES Users(UserID),
+    NotificationText NVARCHAR(MAX),
+    IsRead BIT DEFAULT 0,
+    CreatedAt DATETIME DEFAULT GETDATE()
+);
